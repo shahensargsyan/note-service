@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: ""
+      dockerfile: Dockerfile
+      args:
+          USER_ID: '${WWWUSER:-1000}'
+          GROUP_ID: '${WWWGROUP:-1000}'
+          USER: '${USER:-whoami}'
+    container_name: note-app
+    restart: always
+    working_dir: /var/www/
+    volumes:
+      - ../:/var/www
+    depends_on:
+        - mysql
+    networks:
+        - sail
+  nginx:
+    image: nginx:1.19-alpine
+    container_name: note-nginx
+    restart: always
+    ports:
+      - 8008:80
+    volumes:
+      - ../:/var/www
+      - ./nginx:/etc/nginx/conf.d
+    networks:
+        - sail
+  mysql:
+    container_name: note-db
+    image: mysql:8.0
+    volumes:
+      - ./storage/mysql:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root0
+    networks:
+        - sail
+    ports:
+      - 3316:3306
+networks:
+    sail:
+        driver: bridge
