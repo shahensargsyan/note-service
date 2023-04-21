@@ -24,4 +24,15 @@ class UserController extends Controller
         ]);
 
     }
+
+    public function update(User $user)
+    {
+        $user->update([
+            'name' => request('name'),
+            'email' => request('email'),
+            'password' => request('password') ? bcrypt(request('password')) : $user->password,
+        ]);
+
+        return $user;
+    }
 }
