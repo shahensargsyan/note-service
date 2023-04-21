@@ -10,9 +10,8 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::latest()->get();
 
-        return $users;
+        return User::latest()->get();
     }
 
     public function store()
