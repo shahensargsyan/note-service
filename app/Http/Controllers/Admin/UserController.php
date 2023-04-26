@@ -52,4 +52,15 @@ class UserController extends Controller
 
         return response()->noContent();
     }
+
+    public function changeRole(User $user)
+    {
+        $save = $user->update([
+           'role' => request('role')
+        ]);
+
+        dd($user, $save);
+
+        return response()->json(['success' => true]);
+    }
 }
